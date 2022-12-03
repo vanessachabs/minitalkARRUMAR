@@ -1,7 +1,17 @@
-#include "server.h"
-#include <stdio.h>
-//USR1 1
-//US
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vchastin <vchastin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/03 15:02:45 by vchastin          #+#    #+#             */
+/*   Updated: 2022/12/03 17:10:14 by vchastin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minitalk.h"
+
 int	ft_pow(int base, int exp)
 {
 	if (exp == 0)
@@ -9,43 +19,39 @@ int	ft_pow(int base, int exp)
 	return (base * ft_pow(base, --exp));
 }
 
-void handle_signal(int signum)
+void	handle_signal(int signum)
 {
-    static int  nbit = 8;
-    static int  ch = 0; 
+	static int	nbit = 8;
+	static int	ch = 0;
 
-    if (--nbit >= 0 && signum == SIGUSR1)
-    {
-        ch += ft_pow(2,nbit);
-        printf("%d", ch);
-    }
-    if (nbit == 0)
-    {
-        write(1,&ch,1);
-        nbit = 8;
-        ch = 0;
-    }
+	if (--nbit >= 0 && signum == SIGUSR1)
+		ch += ft_pow(2, nbit);
+	if (nbit == 0)
+	{
+		write (1, &ch, 1);
+		nbit = 8;
+		ch = 0;
+	}
 }
 
-void    print_pid(void)
+void	print_pid(void)
 {
-    ft_putstr_fd("pid:", 1);
-    ft_putnbr_fd(getpid(), 1);
-    ft_putchar_fd('\n', 1);
+	write(1, "pid:", 4);
+	ft_putnbr_fd(getpid(), 1);
+	write(1, "\n", 1);
 }
 
-void    init_server(void)
+void	init_server(void)
 {
-    signal(SIGUSR1, handle_signal);
-    signal(SIGUSR2, handle_signal);
-    while (1)
-        pause();
-} 
+	signal(SIGUSR1, handle_signal);
+	signal(SIGUSR2, handle_signal);
+	while (1)
+		pause();
+}
 
-int main(void)
+int	main(void)
 {
-    print_pid();
-    init_server();
-   
-    return (0);
+	print_pid();
+	init_server();
+	return (0);
 }

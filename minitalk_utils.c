@@ -1,16 +1,57 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   minitalk_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vchastin <vchastin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/11 16:29:14 by vchastin          #+#    #+#             */
-/*   Updated: 2022/06/21 17:20:12 by vchastin         ###   ########.fr       */
+/*   Created: 2022/12/03 16:26:52 by vchastin          #+#    #+#             */
+/*   Updated: 2022/12/03 17:11:46 by vchastin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minitalk.h"
+
+void	ft_putnbr_fd(int n, int fd)
+{
+	char	s;
+
+	if (fd < 0)
+		return ;
+	if (n == -2147483648)
+	{
+		write (fd, "-2147483648", 11);
+		return ;
+	}
+	if (n < 0)
+	{
+		write (fd, "-", 1);
+		n *= -1;
+	}
+	if (n >= 10)
+	{
+		ft_putnbr_fd(n / 10, fd);
+		s = '0' + n % 10;
+	}
+	else if (n < 10)
+	{
+		s = '0' + n;
+	}
+	write (fd, &s, 1);
+}
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	int	i;
+
+	i = 0;
+	if (!s || fd < 0)
+		return ;
+	while (s[i])
+	{
+		write(1, &s[i], 1);
+	}
+}
 
 int	ft_atoi(const char *str)
 {
@@ -36,16 +77,3 @@ int	ft_atoi(const char *str)
 	}
 	return (res * signal);
 }
-/*
-include <stdio.h>
-int main () {
-    int val;
-    char *str = "    20";
-    val = ft_atoi(str);
-    printf("String = %s, Int = %d\n", str, val);
-    str = "23333444";
-    val = ft_atoi(str);
-    printf("String = %s, Int = %d\n", str, val);
-    return(0);
- } 
-*/
