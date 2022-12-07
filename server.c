@@ -28,10 +28,14 @@ void	handle_signal(int signum)
 		ch += ft_pow(2, nbit);
 	if (nbit == 0)
 	{
-		write (1, &ch, 1);
+		if (!ch)
+			write(1, "\n",1);
+		else
+			write (1, &ch, 1);
 		nbit = 8;
 		ch = 0;
 	}
+
 }
 
 void	print_pid(void)
